@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ASCT: New Calibration",
+        "data": {
+          "reference_sensor": "Reference Sensor (The Truth)",
+          "source_sensor": "Source Sensor (To Calibrate)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sensor Calibration Settings",
+        "data": {
+          "train": "🚀 Start 24h Training",
+          "floor": "Minimum Floor (Clamp)",
+          "ceiling": "Maximum Ceiling (Clamp)",
+          "smoothing": "Smoothing Window (Seconds)",
+          "deadzone": "Deadzone (% change to ignore)",
+          "logarithmic": "Use Logarithmic Scaling (Illuminance)",
+          "thermal_lag": "Thermal Lag Compensation (Seconds)",
+          "altitude": "Altitude Correction (Pressure Only - Meters)"
+        }
+      }
+    }
+  }
+}
