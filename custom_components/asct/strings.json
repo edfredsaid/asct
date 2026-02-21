@@ -18,7 +18,7 @@
         "description": "What would you like to do with this sensor pairing?",
         "menu_options": {
           "train_confirm": "🚀 Start 24h Training Cycle",
-          "settings_signal": "🛠️ Configure Signal Processing"
+          "settings_signal": "🛠️ Configure Sensor Settings"
         }
       },
       "train_confirm": {
@@ -26,7 +26,7 @@
         "description": "Are you sure? This will start a 24-hour background process for **{name}**.\n\nEnsure the sensors are physically next to each other before proceeding."
       },
       "settings_signal": {
-        "title": "Signal Processing Configuration",
+        "title": "Sensor Settings",
         "description": "Fine-tune how the sensor data is processed *after* calibration is applied.",
         "data": {
           "floor": "Minimum Value Floor",
