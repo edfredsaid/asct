@@ -1,0 +1,11 @@
+{
+  "entity": {
+    "sensor": {
+      "default": {
+        "state": {
+          "default": "mdi:math-compass"
+        }
+      }
+    }
+  }
+}
