@@ -1,3 +1,5 @@
+<img width="1000" height="400" alt="logo" src="https://github.com/user-attachments/assets/7c0f7892-d350-44fc-be41-2daf70601b0b" />
+
 # Automated Sensor Calibration & Training (ASCT)
 
 **ASCT** is a precision calibration engine for Home Assistant. It eliminates the problem of sensor reading variance by allowing high-variance devices (like IKEA Zigbee Lux sensors or uncalibrated thermometers) to "learn" from a trusted reference standard.
