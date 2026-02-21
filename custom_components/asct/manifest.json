@@ -1,7 +1,7 @@
 {
   "domain": "asct",
   "name": "Automated Sensor Calibration & Training",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "documentation": "https://github.com/edfredsaid/asct",
   "dependencies": [],
   "codeowners": ["@edfredsaid"],
