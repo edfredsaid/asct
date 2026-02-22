@@ -75,6 +75,7 @@ entities:
     attribute: health_score
     name: Calibration Confidence
     icon: mdi:percent
+```
 
 ## 📊 Why ASCT?
 
