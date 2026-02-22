@@ -1,0 +1,52 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ASCT: New Sensor Pairing",
+        "description": "Select the sensor you want to calibrate (Source) and the accurate sensor you want to learn from (Reference).",
+        "data": {
+          "reference_sensor": "Reference Sensor (The Truth)",
+          "source_sensor": "Source Sensor (To Calibrate)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "ASCT Menu",
+        "description": "What would you like to do with this sensor pairing?",
+        "menu_options": {
+          "train_confirm": "Start 24h Training Cycle",
+          "settings_signal": "Configure Sensor Settings"
+        }
+      },
+      "train_confirm": {
+        "title": "Start Training?",
+        "description": "Are you sure? This will start a 24-hour background process for **{name}**.\n\nEnsure the sensors are physically next to each other before proceeding."
+      },
+      "settings_signal": {
+        "title": "Sensor Settings",
+        "description": "Fine-tune how the sensor data is processed *after* calibration is applied.",
+        "data": {
+          "floor": "Minimum Value Floor",
+          "ceiling": "Maximum Value Ceiling",
+          "logarithmic": "Use Logarithmic Scaling",
+          "smoothing": "Smoothing Window (Seconds)",
+          "deadzone": "Deadzone Hysteresis (%)",
+          "thermal_lag": "Thermal Lag Compensation (Seconds)",
+          "altitude": "Altitude Offset (Meters)"
+        },
+        "data_description": {
+          "floor": "The sensor will never report a value lower than this number. Useful for sensors that drop to 0 too early.",
+          "ceiling": "The sensor will never report a value higher than this number. Useful for clamping humidity at 100%.",
+          "logarithmic": "Recommended for Lux sensors. Makes low-light changes more perceptible, matching human vision.",
+          "smoothing": "Averages readings over time to remove sudden spikes (e.g., a bird flying over solar sensor). 0 to disable.",
+          "deadzone": "Ignores changes smaller than this percentage to prevent noisy updates and database clutter.",
+          "thermal_lag": "For slow-to-respond temperature sensors (e.g., in plastic cases). Predicts the real value ahead of time.",
+          "altitude": "For pressure sensors only. Adjusts reading to Mean Sea Level based on your current elevation."
+        }
+      }
+    }
+  }
+}
