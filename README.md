@@ -2,21 +2,9 @@
 
 # Automated Sensor Calibration & Training (ASCT)
 
-**ASCT** is a precision calibration engine for Home Assistant. It eliminates the problem of sensor reading variance by allowing high-variance devices (like IKEA Zigbee Lux sensors or uncalibrated thermometers) to "learn" from a trusted reference standard.
+**ASCT** is a precision calibration engine for Home Assistant. It mitigates against the problem of sensor variance by allowing high-variance devices (like IKEA Zigbee Lux sensors or uncalibrated thermometers) to "learn" from a trusted reference standard.
 
 Unlike simple offsets, ASCT uses **Linear Regression** to calculate both the scaling (multiplier) and the baseline (offset) of a sensor, ensuring accuracy across the entire range of measurements.
-
----
-
-## 🏗 How It Works
-
-ASCT operates on a **Source** and **Reference** model:
-
-1.  **Pairing:** You place a **Source Sensor** (the one you want to fix) physically adjacent to a **Reference Sensor** (your most accurate device).
-2.  **Training Phase:** You trigger a 24-hour training cycle. ASCT collects data points in the background, capturing the natural fluctuations of the environment.
-3.  **The Math:** ASCT performs a linear regression ($y = mx + b$) on the data, filtering out outliers (like temporary shadows or heat spikes) using standard deviation analysis.
-4.  **The Output:** ASCT generates a new "Calibrated" entity (e.g., `sensor.kitchen_lux_calibrated`) that mirrors the behavior of the Reference sensor while using the hardware of the Source sensor.
-5.  **Use:** You can now use your new calibrated entity anywhere just as any other sensor value.
 
 ---
 
@@ -36,20 +24,57 @@ ASCT operates on a **Source** and **Reference** model:
 
 ---
 
-## 🛠 Usage
+## How It Works
 
-### 1. Initial Setup
-Go to **Settings > Devices & Services > Add Integration** and search for **ASCT**. Follow the UI prompts to select your Source and Reference sensors.
+1. **Pair Sensors:** Go to **Settings > Devices & Services > Add Integration**, search for ASCT, and select your Source (inaccurate) and Reference (accurate) sensors.
+2. **Start Training:** Click **Configure** on the new integration and select **Start 24h Training Cycle**.
+3. **Wait:** Leave the two sensors physically next to each other for 24 hours. The integration will silently collect data points every time they change.
+4. **Enjoy:** After 24 hours, the math is applied, and your new calibrated sensor will accurately mirror the reference environment!
 
-### 2. Start Training
-1. Navigate to **Settings > Devices & Services**.
-2. Find your **ASCT** integration card.
-3. Click **Configure** (or the three dots `⋮` > Configure).
-4. Check **Start 24h Training Now** and click **Submit**.
-5.  **Wait 24 Hours.** Do not move or interfere with the sensors during this window.
+---
 
-### 3. Deployment
-Once training is complete, you will receive a notification. You can now move the **Source Sensor** to its permanent location. The output entity created by ASCT will automatically apply the learned correction factor to all future readings.
+### ⚠️ Important: Training Interruption
+The training process runs entirely in Home Assistant's active memory for exactly 24 hours. 
+**Restarting Home Assistant while a training cycle is active will permanently abort the training.** If this happens, you will receive a notification warning you that the training was aborted. You will need to start the process again from the Configuration menu.
+
+---
+
+## 🛠️ Configuration & Signal Processing
+
+Once your sensor is paired (or even after it is trained), you can click **Configure** on the integration to access advanced signal processing settings. These settings change how your sensor behaves *after* the calibration math is applied.
+
+* **Minimum Value Floor:** The sensor will never report a value lower than this number. Useful for sensors that drop to 0 too early.
+* **Maximum Value Ceiling:** The sensor will never report a value higher than this number. Useful for clamping humidity at 100%.
+* **Use Logarithmic Scaling:** Recommended for Lux/Illuminance sensors. This makes low-light changes more perceptible, matching human vision.
+* **Smoothing Window (Seconds):** Averages readings over time to remove sudden, noisy spikes (e.g., a bird flying over a solar sensor, or a draft hitting a thermostat). Set to `0` to disable.
+* **Deadzone Hysteresis (%):** The sensor will ignore tiny fluctuations smaller than this percentage. This prevents noisy, constant updates from flooding your Home Assistant database.
+* **Thermal Lag Compensation (Seconds):** Designed for slow-to-respond temperature sensors (e.g., those enclosed in thick plastic cases). It calculates the rate of change to predict and report the real temperature ahead of time.
+* **Altitude Offset (Meters):** For pressure sensors only. Adjusts the reading to Mean Sea Level (MSL) based on your current physical elevation.
+
+---
+
+## 📊 Calibration Confidence (Health Score)
+
+When the 24-hour training completes, ASCT calculates an R² correlation score, representing how closely the source sensor tracks the reference sensor. 
+
+To keep your entity list clean, this percentage is stored as a hidden **Attribute** on your calibrated sensor rather than a separate entity. 
+
+**How to view your Confidence Score:**
+1. Click on your calibrated sensor in any dashboard.
+2. Expand the **Attributes** dropdown in the More Info pop-up.
+3. Look for `health_score`.
+
+**How to display it on a dashboard:**
+You can easily extract this attribute using a standard entities card in your Lovelace dashboard:
+
+```yaml
+type: entities
+entities:
+  - type: attribute
+    entity: sensor.your_calibrated_sensor
+    attribute: health_score
+    name: Calibration Confidence
+    icon: mdi:percent
 
 ## 📊 Why ASCT?
 
