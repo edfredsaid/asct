@@ -26,7 +26,7 @@ Unlike simple offsets, ASCT uses **Linear Regression** to calculate both the sca
 
 ## How It Works
 
-1. **Pair Sensors:** Go to **Settings > Devices & Services > Add Integration**, search for ASCT, and select your Source (inaccurate) and Reference (accurate) sensors.
+1. **Pair Sensors:** Go to **Settings > Devices & Services > Add Integration**, search for Automated Sensor Calibration & Training, and select your Source (inaccurate) and Reference (accurate) sensors.
 2. **Start Training:** Click **Configure** on the new integration and select **Start 24h Training Cycle**.
 3. **Wait:** Leave the two sensors physically next to each other for 24 hours. The integration will silently collect data points every time they change.
 4. **Enjoy:** After 24 hours, the math is applied, and your new calibrated sensor will accurately mirror the reference environment!
