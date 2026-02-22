@@ -2,6 +2,7 @@ import asyncio
 import logging
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.event import async_track_state_change_event
+from homeassistant.components import persistent_notification
 from .const import *
 from .linear_regression import calculate_calibration
 
@@ -23,28 +24,35 @@ class ASCTCoordinator:
     async def start_training(self):
         self.data_points = []
         nid = f"asct_{self.entry.entry_id}"
-        self.hass.components.persistent_notification.async_create(
+
+        # FIX 4: Correct strict API usage for notifications
+        persistent_notification.async_create(
+            self.hass,
             f"Training started for {self.entry.title}. Keep sensors side-by-side for 24h.",
-            "ASCT Training Active", nid
+            title="ASCT Training Active",
+            notification_id=nid
         )
 
         unsub = async_track_state_change_event(
-            self.hass, [self.entry.data[CONF_REFERENCE_SENSOR], self.entry.data[CONF_SOURCE_SENSOR]],
+            self.hass,
+            [self.entry.data[CONF_REFERENCE_SENSOR], self.entry.data[CONF_SOURCE_SENSOR]],
             self._handle_update
         )
 
-        await asyncio.sleep(86400)
+        await asyncio.sleep(86400) # 24 Hour training window
         unsub()
 
         m, b, health = calculate_calibration(self.data_points)
         self.hass.config_entries.async_update_entry(
-            self.entry, data={**self.entry.data, CONF_MULTIPLIER: m, CONF_OFFSET: b, CONF_HEALTH: health}
+            self.entry,
+            data={**self.entry.data, CONF_MULTIPLIER: m, CONF_OFFSET: b, CONF_HEALTH: health}
         )
 
-        self.hass.components.persistent_notification.async_dismiss(nid)
-        self.hass.components.persistent_notification.async_create(
+        persistent_notification.async_dismiss(self.hass, nid)
+        persistent_notification.async_create(
+            self.hass,
             f"Training Complete for {self.entry.title}!\n\nConfidence: {health}%\nMultiplier: {m}\nOffset: {b}",
-            "ASCT Complete"
+            title="ASCT Complete"
         )
 
     @callback

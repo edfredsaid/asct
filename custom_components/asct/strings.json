@@ -23,7 +23,7 @@
       },
       "train_confirm": {
         "title": "Start Training?",
-        "description": "Are you sure? This will start a 24-hour background process for **{name}**. Ensure the sensors are physically next to each other before proceeding."
+        "description": "Are you sure? This will start a 24-hour background process for **{name}**.\n\nEnsure the sensors are physically next to each other before proceeding."
       },
       "settings_signal": {
         "title": "Sensor Settings",
